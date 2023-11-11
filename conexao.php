@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 // Informações de conexão com o banco de dados
 $dbservername = "localhost"; // Nome do servidor MySQL
 $dbusername = "root"; // Nome de usuário do banco de dados

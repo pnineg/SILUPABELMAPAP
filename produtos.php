@@ -1,46 +1,65 @@
 <?php
+
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 ob_start();
 include('conexao.php');
 session_start();
+var_dump($_SESSION);
+var_dump($_POST);
 ?>
 
 <!--ADICIONAR AO CARRINHO-->
 
 
 <?php
-if(isset($_POST['add_no_carrinho'])){
 
-    
 
-     // As variáveis necessárias precisam ser definidas
-    // Certifique-se de obter o $id_user de alguma forma (como de uma sessão)
-    
+// Obter o user id
+$id_user = $_SESSION['id_user'];
 
-    if (isset($_POST['add_no_carrinho'])) {
-        // Verifique se os campos necessários estão definidos
-        if (isset($_POST['id_encomenda'], $_POST['id_produto'], $_POST['quantidade'], $_POST['valor_produto'])) {
-            $id_encomenda = $_POST['id_encomenda'];
-            $id_produto = $_POST['id_produto'];
-            $quantidade = $_POST['quantidade'];
-            $valor_produto = $_POST['valor_produto'];
-    
-            $check_cart_numbers = mysqli_query($conn, "SELECT * FROM linhas_encm WHERE 
-                id_produto = '$id_produto' AND id_encomenda = '$id_encomenda'") or die('Query failed');
-    
-            if (mysqli_num_rows($check_cart_numbers) > 0) {
-                $message[] = 'Já está adicionado ao carrinho';
-            } else {
-                mysqli_query($conn, "INSERT INTO linhas_encm (id_encomenda, id_produto, quantidade, valor_produto) 
-                    VALUES ('$id_encomenda', '$id_produto', '$quantidade', '$valor_produto')") or die('Query failed');
-                $message[] = 'Produto adicionado ao carrinho!';
-            }
-        } else {
-            $message[] = 'Campos obrigatórios não estão definidos.';
-        }
+// Verifique se os campos necessários estão definidos
+if (isset($_POST['id_produto'], $_POST['quantidade'])) {
+    $id_produto = $_POST['id_produto'];
+    $quantidade = $_POST['quantidade'];
+    $preço_uni = $_POST['preço_uni'];
+
+    // Calcular o valor total para enviar na encomenda
+    $valor_total = $quantidade * $preço_uni;
+
+    // Cria uma nova encomenda
+    $id_encomenda = criarNovaEncomenda($conn, $id_user, $valor_total);
+
+    // Verifique se o produto já está no carrinho
+    $check_cart_numbers = mysqli_query($conn, "SELECT * FROM linhas_encm WHERE 
+        id_produto = '$id_produto' AND id_encomenda = '$id_encomenda'") or die('Query failed');
+
+    if (mysqli_num_rows($check_cart_numbers) > 0) {
+        $message[] = 'Já está adicionado ao carrinho';
+    } else {
+        // Adicione o produto ao carrinho
+        mysqli_query($conn, "INSERT INTO linhas_encm (id_encomenda, id_produto, quantidade, valor_produto) 
+            VALUES ('$id_encomenda', '$id_produto', '$quantidade', '$preço_uni')") or die('Query failed');
+        $message[] = 'Produto adicionado ao carrinho!';
     }
+} else {
+    $message[] = 'Campos obrigatórios não estão definidos.';
+}
+
+// Função para criar uma nova encomenda e retornar o id_encomenda
+function criarNovaEncomenda($conn, $id_user, $valor_total) {
+    // Data atual
+    $data_encomenda = date("Y-m-d");
+
+    // Insira uma nova encomenda
+    mysqli_query($conn, "INSERT INTO encomendas (data_encomenda, id_user, valor_total) 
+        VALUES ('$data_encomenda', '$id_user', $valor_total)") or die('Query failed');
+
+    // Obtenha o id_encomenda recém-criado
+    $id_encomenda = mysqli_insert_id($conn);
+
+    return $id_encomenda;
 }
 ?>
 
@@ -181,12 +200,14 @@ if(isset($_POST['add_no_carrinho'])){
 
         <!-- DADOS ID PRODUTO -->
     <input type="hidden" name="id_produto" value="<?php echo $fetch_products['id_produto']; ?>">
+    <input type="hidden" name="preço_uni" value="<?php echo $fetch_products['preço_uni']; ?>">
 
         <!-- QUANTIDADE -->
     <input type="number" min="1" name="quantidade" value="1" class="qnt">
 
         <!-- BOTÃO CARRINHO -->
     <input type="submit" name="add_no_carrinho" value="adicionar no carrinho" class="buttonn">
+
  
       
            </form>

@@ -8,7 +8,7 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Conectar ao banco de dados 
-    $mysqli = new mysqli("localhost","root","","silupabelma");
+    $mysqli = new mysqli("localhost","root","root","silupabelma"); // Mudar pass para vazio
     
     // Verificar a conexão
     if ($mysqli->connect_error) {
@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Coletar dados 
     $email = $_POST["email"];
+    
     $password = $_POST["password"];
     
     // Consultar o banco de dados para verificar o user
@@ -33,13 +34,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($row["admin"] == 1) {
                      //Armazenar dados do utilizador na sessão
                     $_SESSION["admin"] = 1;
+                    $_SESSION["id_user"] = $row["id_user"]; // Adicionar o id_user para a sessao
                     $_SESSION["email"] = $email;
+                    
                     // Este é um administrador, redirecione para o painel de admin
                     header("Location: homepage.php");
                 } else {
                     unset($_SESSION["admin"]);
                     //Armazenar dados do utilizador na sessão
                     $_SESSION["email"] = $email;
+                    $_SESSION["id_user"] = $row["id_user"]; // Adicionar o id_user para a sessao
                     // Este é um utilizador, redireciona para a homepage
                     header("Location: homepage.php");
                 }

@@ -441,19 +441,19 @@ if (isset($_GET['delete'])) {
      class="box" required placeholder="Stock do Produto">
     <!-- CAPACIDADE --> 
     <input type="text" name="update_capacidade" value="<?php echo $fetch_update ['capacidade']; ?>"
-     class="box" required placeholder="Capacidade do Produto">
+     class="box" placeholder="Capacidade (ex: 350L)" required pattern="[0-9]+L" minlength="4" maxlength="4" title="Capacidade Incorreta">
     <!-- COR -->
     <input type="text" name="update_cor" value="<?php echo $fetch_update ['cor']; ?>"
      class="box" required placeholder="Cor do Produto">
     <!-- MARCA -->
     <input type="text" name="update_marca" value="<?php echo $fetch_update ['marca']; ?>"
      class="box" required placeholder="Marca do Produto">
-    <!-- TAMANHO -->
+    <!-- DIMENSÕES -->
     <input type="text" name="update_dimensões" value="<?php echo $fetch_update ['dimensões']; ?>"
-     class="box" required placeholder="Dimensões do Produto">
+     class="box" placeholder="Dimensões (ex: 486x300)" required pattern="\d{3,4}x\d{3,4}" minlength="7" maxlength="9" title="Dimensões Incorretas">
     <!-- PREÇO -->
     <input type="text" name="update_preço_uni" value="<?php echo $fetch_update ['preço_uni']; ?>"
-     class="box" min="0" required placeholder="Preço do Produto">
+     class="box" min="0" placeholder="Preço do produto (€)" required pattern="^\d+(\.\d{1,2})?€" minlength="2" maxlength="8" title="Preço Introduzido Está Incorreto">
 
      <input type="file" class="box" name="update_foto" accept="image/jpg, image/jpeg, image/png">
      <input type="submit" value="Atualizar Produto" name="update_product" class="buttonn" >

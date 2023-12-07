@@ -1,4 +1,7 @@
 <?php
+
+//Código para mostrar erros
+
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
@@ -23,9 +26,6 @@ if ($result->num_rows > 0) {
     echo "Usuário não encontrado na base de dados.";
     exit;
 }
-
-// Fechando a conexão com a bd
-$conn->close();
 ?>
 
 
@@ -48,7 +48,9 @@ $conn->close();
 		<link rel="stylesheet" href="assets/css/main.css" />
         <link rel="stylesheet" href="perfil.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-	</head>
+        
+        <link rel="icon" href="images/BELMA.png" type="image/png" sizes="16x16">
+    </head>
 	<body>
 		<div id="page-wrapper">
 
@@ -64,11 +66,14 @@ $conn->close();
 										<a href="homepage.php">Início</a>
 										<a href="produtos.php">Produtos</a>
 										<a href="serviços.php">Serviços</a>
+                                        <!-- BOTAO ADMIN -->
 										<?php if (isset($_SESSION["admin"]) && $_SESSION["admin"] == 1) {
                                                 echo "<a href='admin_edit.php'>Admin</a>";
                                             
                                         }
                                         ?>
+                                        <!-- BOTAO ADMIN FIM-->
+
 										<a href="perfil.php" class="current-page-item">Perfil</a>
 
 										  <!-- Carrinho botão -->

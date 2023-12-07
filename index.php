@@ -10,6 +10,8 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+
+        <link rel="icon" href="images/BELMA.png" type="image/png" sizes="16x16">
 	</head>
 	<body>
 		<div id="page-wrapper">
@@ -24,6 +26,7 @@
 									<h1><a href="index.php" id="logo"><img src="https://silupa.pt/wp-content/uploads/2017/09/logo-footer.png"></a></h1>
 									<nav id="nav">
 										<a href="index.php" class="current-page-item">Início</a>
+                                        <a href="serviçosINDEX.php">Serviços</a>
 										<a href="registo.php">entrar</a>
 										
 									</nav>

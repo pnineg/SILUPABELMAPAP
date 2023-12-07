@@ -1,5 +1,7 @@
-
 <?php
+
+//Código para mostrar erros
+
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
@@ -16,6 +18,7 @@ if (isset($_SESSION["admin"]) && $_SESSION["admin"] == 1) {
 }
 ?>
  
+ <!-- ADICIONAR PRODUTOS -->
 
 <?php
 if (isset($_POST["add_product"])) {
@@ -32,6 +35,8 @@ if (isset($_POST["add_product"])) {
     $cor = $_POST['cor']; 
     $marca = $_POST['marca']; 
     $dimensões = $_POST['dimensões']; 
+
+    // DIZER 
 
     $select_product_name = mysqli_query($conn, "SELECT name FROM products WHERE name = '$name'") or die('query failed');
 
@@ -54,6 +59,11 @@ if (isset($_POST["add_product"])) {
     }
 }
 
+// ADICIONAR PRODUTOS FIM
+
+
+
+
 // DELETAR O PRODUTO 
 
 if (isset($_GET['delete'])) {
@@ -61,14 +71,22 @@ if (isset($_GET['delete'])) {
     $delete_foto_query = mysqli_query($conn, "SELECT foto FROM products WHERE id_produto = '$delete_id'") or die('query failed');
     
     $fetch_delete_foto = mysqli_fetch_assoc($delete_foto_query);
+
+if ($fetch_delete_foto) {
     $foto_name = $fetch_delete_foto['foto'];
     unlink('uploaded_img/' . $foto_name);
-
     mysqli_query($conn, "DELETE FROM products WHERE id_produto = $delete_id") or die('query failed');
     echo "<script>alert('Produto deletado com sucesso!'); window.location.href = 'admin_edit.php';</script>";
+} else {
+    echo "<script>alert('Produto não encontrado!'); window.location.href = 'admin_edit.php';</script>";
+}
 }
 
-// ATUALIZAR PRODUTO PHP
+
+
+
+
+// ATUALIZAR PRODUTO PHP EXPLICAR
 
 if(isset($_POST['update_product'])){
 
@@ -78,8 +96,8 @@ if(isset($_POST['update_product'])){
     $update_capacidade = $_POST['update_capacidade'];
     $update_cor = $_POST['update_cor'];
     $update_marca = $_POST['update_marca'];
-    $update_tamanho = $_POST['update_dimensões'];
-    $update_price = $_POST['update_preço_uni'];  // 
+    $update_dimensões = $_POST['update_dimensões'];
+    $update_price = $_POST['update_preço_uni'];
 
     // Correção da consulta SQL
     $sql = "UPDATE products 
@@ -117,23 +135,20 @@ if(isset($_POST['update_product'])){
 
 
 
-// ENCOMENDAS FEITAS UPDATE E DELETE 
+// ENCOMENDAS FEITAS UPDATE E DELETE EXPLICAR
 
 if (isset($_GET['delete'])) {
     $delete_id_encomenda = $_GET['delete'];
     $stmt = $conn->prepare("DELETE FROM encomendas WHERE id_encomenda = ?");
-    $stmt->bind_param("i", $delete_id_encomenda); // Supondo que id seja um número inteiro (ajuste conforme o tipo de dados)
+    $stmt->bind_param("i", $delete_id_encomenda); 
 
     if ($stmt->execute()) {
         header('Location: admin_edit.php');
         exit();
     } else {
-        die('Falha ao excluir a encomenda.');
+        echo "<script>alert('Não foi possível deletar a encomenda, pois ela ainda está no carrinho.'); window.location.href = 'admin_edit.php';</script>";
     }
 }
-
-
-
 ?>
 
 
@@ -154,7 +169,7 @@ if (isset($_GET['delete'])) {
         <link rel="stylesheet" href="admin.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-       
+        <link rel="icon" href="images/BELMA.png" type="image/png" sizes="16x16">
 	</head>
 	<body>
 		<div id="page-wrapper">
@@ -171,12 +186,13 @@ if (isset($_GET['delete'])) {
 										<a href="homepage.php">Início</a>
 										<a href="produtos.php">Produtos</a>
 										<a href="serviços.php">Serviços</a>
-                        
+                                <!-- BOTAO ADMIN -->
                                 <?php
                                 if (isset($_SESSION["admin"]) && $_SESSION["admin"] == 1) {
                                 echo '<a href="admin_edit.php" class="current-page-item">Admin</a>';
                                 }
                                 ?>
+                                <!-- BOTAO ADMIN Fim-->
 
 										<a href="perfil.php">Perfil</a>
 
@@ -318,13 +334,13 @@ if (isset($_GET['delete'])) {
     <input type="number" name="stock" class="box" min="0" placeholder="Stock" required>
 
     <!-- PREÇO --> 
-    <input type="text" min="0" name="preço_uni" class="box" placeholder="Preço do produto" required>
+    <input type="text" min="0" name="preco_uni" class="box" placeholder="Preço do produto (€)" required pattern="^\d+(\.\d{1,2})?€" minlength="2" maxlength="8" title="Preço Introduzido Está Incorreto">
 
     <!-- FOTO --> 
     <input type="file" name="foto" accept="image/jpg, image/jpg, image/jpg" class="box" required>
 
     <!-- CAPACIDADE --> 
-    <input type="text" name="capacidade" class="box" placeholder="Capacidade" required>
+    <input type="text" name="capacidade" class="box" placeholder="Capacidade (ex: 350L)" required pattern="[0-9]+L" minlength="4" maxlength="4" title="Capacidade Incorreta">
 
      <!-- COR --> 
      <input type="text" name="cor" class="box" placeholder="Cor" required>
@@ -332,8 +348,9 @@ if (isset($_GET['delete'])) {
      <!-- MARCA --> 
      <input type="text" name="marca" class="box" placeholder="Marca" required>
 
-     <!-- dimensões --> 
-     <input type="text" name="dimensões" class="box" placeholder="Dimensões" required>
+     <!-- DIMENSÕES -->
+    <input type="text" name="dimensoes" class="box" placeholder="Dimensões (ex: 486x300)" required pattern="\d{3,4}x\d{3,4}" minlength="7" maxlength="9" title="Dimensões Incorretas">
+
 
     <input type="submit" value="adicionar" name="add_product" class="buttonn">
 
@@ -487,7 +504,6 @@ if (isset($_GET['delete'])) {
                     <option value="completo">completo</option>
                 </select>
 
-                <input type="submit" value="atualizar" name="update_encomenda" class="buttonn">
                 <a href="admin_edit.php?delete=<?php echo $fetch_encomendas['id_encomenda']; ?>"
                  onclick="return confirm('Deletar essa Encomenda?');" class="buttonn">apagar</a>
             </form>

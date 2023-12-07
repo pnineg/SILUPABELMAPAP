@@ -1,6 +1,9 @@
 <!--LOGIN PHP-->
 
 <?php
+
+//Código para mostrar erros
+
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
@@ -8,7 +11,7 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Conectar ao banco de dados 
-    $mysqli = new mysqli("localhost","root","root","silupabelma"); // Mudar pass para vazio
+    $mysqli = new mysqli("localhost","root","","silupabelma"); // Mudar pass para vazio
     
     // Verificar a conexão
     if ($mysqli->connect_error) {
@@ -78,6 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
         <link rel="stylesheet" href="login.css" />
+
+        <link rel="icon" href="images/BELMA.png" type="image/png" sizes="16x16">
 	</head>
     <body>
 		<div id="page-wrapper">
@@ -92,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 									<h1><a href="index.php" id="logo"><img src="https://silupa.pt/wp-content/uploads/2017/09/logo-footer.png"></a></h1>
 									<nav id="nav">
 										<a href="index.php">Início</a>
+                                        <a href="serviçosINDEX.php">Serviços</a>
 										<a href="registo.php" class="current-page-item">entrar</a>
 										
 									</nav>
@@ -116,19 +122,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="card">
     <div class="card2">
       <form class="form" action="login.php" method="POST">
-      <p id="heading">Login</p>
+      <p id="heading">Entrar</p>
       <div class="field">
         <input type="text" name="email" class="input-field" placeholder="Email" autocomplete="off">
       </div>
       <div class="field">
-        <input type="password" name="password" class="input-field" placeholder="Senha"  > 
+        <input type="password" minlength="6" name="password" class="input-field" placeholder="Senha"  > 
       </div>
       <div class="btn">
-      <button class="button1">Login</button>
+      <button class="button1">Entrar</button>
       </form>
       <a href="registo.php" class="button2">Registo</a>
       </div>
-    </div>
+      </div>
       </div>
 
       <br>
@@ -140,6 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <br>
       <br>
       <br>
+      
       
 
     <!-- Footer -->

@@ -1,8 +1,9 @@
-
 <!-- REGISTO PHP-->
 
-
 <?php
+
+//Código para mostrar erros
+
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
@@ -65,6 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
         <link rel="stylesheet" href="registo.css" />
+
+        <link rel="icon" href="images/BELMA.png" type="image/png" sizes="16x16">
 	</head>
     <body>
 		<div id="page-wrapper">
@@ -79,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 									<h1><a href="index.php" id="logo"><img src="https://silupa.pt/wp-content/uploads/2017/09/logo-footer.png"></a></h1>
 									<nav id="nav">
 										<a href="index.php">Início</a>
+                                        <a href="serviçosINDEX.php">Serviços</a>
 										<a href="registo.php" class="current-page-item">entrar</a>
 										
 									</nav>
@@ -90,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				</div>
 <body>
 
-    <br>
+<br>
 <br>
 <br>
 <br>
@@ -112,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <!--nome-->
           <div class="field">
-            <input type="text"  name="nome" class="input-field" placeholder="Nome" autocomplete="off">
+            <input type="text" minlength="9" name="nome" class="input-field" placeholder="Nome" autocomplete="off">
           </div>
           <!--morada-->
           <div class="field">
@@ -120,29 +124,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
           <!--codigo postal-->
           <div class="field">
-            <input type="text"  name="cod_postal" class="input-field" placeholder="Código postal" autocomplete="off">
+            <input type="text" name="cod_postal" class="input-field" placeholder="Código postal" autocomplete="off" 
+            pattern="[0-9]{4}-[0-9]{3}" minlength="8" maxlength="8" title="Código postal incompleto">
           </div>
 
           <!--NIF-->
           <div class="field">
-            <input type="text"  name="NIF" class="input-field" placeholder="NIF" autocomplete="off">
+            <input type="text"  minlength="9" name="NIF" class="input-field" placeholder="NIF" autocomplete="off">
           </div>
           
-<!--pass-->
+          <!--pass-->
           <div class="field">
-            <input type="password" name="password" class="input-field" placeholder="Senha">
+            <input type="password" minlength="6" name="password" class="input-field" placeholder="Senha">
           </div>
           <div class="btn2">
           <button class="button1" type="submit" name="submit">Registar</button>
-          <a href="login.php" class="button2">Login</a>
+          <a href="login.php" class="button2">Entrar</a>
           </div>
           
       </form>
         </div>
           </div>
-
-
-
 
 <br>
 <br>
